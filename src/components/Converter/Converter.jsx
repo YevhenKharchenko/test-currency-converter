@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import Container from '../Container/Container.jsx';
-import s from './Converter.module.css';
 import Select from '../Select/Select.jsx';
 import Input from '../Input/Input.jsx';
+import s from './Converter.module.css';
 
 const Converter = ({ usd, eur }) => {
   const [firstValue, setFirstValue] = useState(0);
@@ -58,17 +58,23 @@ const Converter = ({ usd, eur }) => {
   };
 
   return (
-    <main>
+    <main className={s.converter}>
       <Container>
         <form className={s.form}>
-          <div className={s.inputWrapper}>
-            <Input inputValue={firstValue} handleValueChange={handleFirstValueChange} />
-            <Select currency={firstCurrency} handleCurrencyChange={handleFirstCurrencyChange} />
-          </div>
-          <div className={s.inputWrapper}>
-            <Input inputValue={secondValue} handleValueChange={handleSecondValueChange} />
-            <Select currency={secondCurrency} handleCurrencyChange={handleSecondCurrencyChange} />
-          </div>
+          <label className={s.label}>
+            From:
+            <div className={s.inputWrapper}>
+              <Input inputValue={firstValue} handleValueChange={handleFirstValueChange} />
+              <Select currency={firstCurrency} handleCurrencyChange={handleFirstCurrencyChange} />
+            </div>
+          </label>
+          <label className={s.label}>
+            To:
+            <div className={s.inputWrapper}>
+              <Input inputValue={secondValue} handleValueChange={handleSecondValueChange} />
+              <Select currency={secondCurrency} handleCurrencyChange={handleSecondCurrencyChange} />
+            </div>
+          </label>
         </form>
       </Container>
     </main>
