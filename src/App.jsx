@@ -1,32 +1,34 @@
-import { useEffect } from "react";
-import Converter from "./components/Converter/Converter.jsx";
-import Header from "./components/Header/Header.jsx";
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import { requestCurrencyRate } from './services/monobank-api.js';
+import { CURRENCY_CODE } from './constants/currencyCode.js';
+import Header from './components/Header/Header.jsx';
+import Converter from './components/Converter/Converter.jsx';
 
 function App() {
-  const [usd, setUsd] = useState("");
-  const [eur, setEur] = useState("");
+  const [usd, setUsd] = useState('');
+  const [eur, setEur] = useState('');
 
   useEffect(() => {
     async function getCurrency() {
-      try {
-        const response = await fetch("https://api.monobank.ua/bank/currency");
-        const data = await response.json();
+      const data = await requestCurrencyRate();
 
-        if (Array.isArray(data)) {
-          const usdCurrency = data.find(
-            (item) => item.currencyCodeA === 840 && item.currencyCodeB === 980
-          );
-          const eurCurrency = data.find(
-            (item) => item.currencyCodeA === 978 && item.currencyCodeB === 980
-          );
+      if (Array.isArray(data)) {
+        const usdCurrency = data.find(
+          item =>
+            item.currencyCodeA === CURRENCY_CODE.USD && item.currencyCodeB === CURRENCY_CODE.UAH
+        );
+        const eurCurrency = data.find(
+          item =>
+            item.currencyCodeA === CURRENCY_CODE.EUR && item.currencyCodeB === CURRENCY_CODE.UAH
+        );
 
-          setUsd(usdCurrency ? usdCurrency.rateBuy : "N/A");
-          setEur(eurCurrency ? eurCurrency.rateBuy : "N/A");
-        }
-      } catch (error) {
-        console.error("Error fetching currency data:", error);
+        setUsd(usdCurrency ? usdCurrency.rateBuy : '');
+        setEur(eurCurrency ? eurCurrency.rateBuy : '');
+
+        return;
+      } else {
+        setUsd('N/A');
+        setEur('N/A');
       }
     }
 
